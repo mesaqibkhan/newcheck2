@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Greylon - Where Tech Meets Sustainability</title>
+  <meta name="description" content="Greylon - Your trusted partner for e-waste management, IT asset disposal, and refurbished IT equipment in Mumbai, India" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    html,body,#root{height:100%;margin:0;scroll-behavior:smooth;}
+    
+    /* Ticker Animation - FASTER */
+    .ticker{animation:scroll 15s linear infinite;}
+    .ticker:hover{animation-play-state:paused;}
+    @keyframes scroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+    
+    /* Card Hover Effects - FASTER */
+    .card-hover{transition:all .2s cubic-bezier(0.4, 0, 0.2, 1);}
+    .card-hover:hover{transform:translateY(-12px) scale(1.02);box-shadow:0 25px 50px -12px rgba(0,0,0,.15);}
+    
+    /* Gradient Animation - FASTER */
+    .gradient-animate{
+      background:linear-gradient(-45deg,#10b981,#059669,#34d399,#6ee7b7);
+      background-size:400% 400%;
+      animation:gradient 8s ease infinite;
+    }
+    @keyframes gradient{
+      0%{background-position:0% 50%;}
+      50%{background-position:100% 50%;}
+      100%{background-position:0% 50%;}
+    }
+    
+    /* Pulse Animation - FASTER */
+    .pulse-slow{animation:pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;}
+    
+    /* Floating Animation - FASTER */
+    .float{animation:float 3s ease-in-out infinite;}
+    @keyframes float{
+      0%,100%{transform:translateY(0px);}
+      50%{transform:translateY(-20px);}
+    }
+    
+    /* Fade In Animation - FASTER */
+    .fade-in{animation:fadeIn 0.5s ease-in;}
+    @keyframes fadeIn{
+      from{opacity:0;transform:translateY(20px);}
+      to{opacity:1;transform:translateY(0);}
+    }
+    
+    /* Shimmer Effect - FASTER */
+    .shimmer{
+      position:relative;
+      overflow:hidden;
+    }
+    .shimmer::before{
+      content:'';
+      position:absolute;
+      top:0;
+      left:-100%;
+      width:100%;
+      height:100%;
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent);
+      animation:shimmer 1.5s infinite;
+    }
+    @keyframes shimmer{
+      0%{left:-100%;}
+      100%{left:100%;}
+    }
+    
+    /* Glowing Border */
+    .glow-border{
+      position:relative;
+      border:2px solid transparent;
+      background:linear-gradient(white,white) padding-box,
+                 linear-gradient(45deg,#10b981,#059669) border-box;
+    }
+    
+    /* Particle Background */
+    .particles{
+      position:absolute;
+      width:100%;
+      height:100%;
+      overflow:hidden;
+    }
+    .particle{
+      position:absolute;
+      border-radius:50%;
+      background:rgba(16,185,129,0.3);
+      animation:rise 15s infinite ease-in;
+    }
+    @keyframes rise{
+      0%{transform:translateY(100vh) scale(0);opacity:0;}
+      50%{opacity:1;}
+      100%{transform:translateY(-100vh) scale(1);opacity:0;}
+    }
+    /* Hide scrollbar but keep functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+  </style>
+</head>
+<body class="antialiased bg-white text-gray-900">
+  <div id="root"></div>
+
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <script type="text/babel">
+    const {useState,useEffect}=React;
+
+    function Greylon(){
+      const [page,setPage]=useState("home");
+      const [form,setForm]=useState({name:"",company:"",email:"",message:""});
+      const [scrolled,setScrolled]=useState(false);
+      const [menuOpen,setMenuOpen]=useState(false);
+      const [products, setProducts] = useState([
+        {
+          icon: "laptop",
+          name: "Dell Latitude 7490",
+          specs: "i5 • 16GB RAM • 512GB SSD",
+          price: "₹22,000",
+          features: ["90 Day Warranty", "Clean Install", "Tested Battery"],
+          image: "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=400"
+        },
+        {
+          icon: "monitor",
+          name: "HP EliteDesk 800 G3",
+          specs: "i7 • 16GB RAM • 256GB SSD",
+          price: "₹18,500",
+          features: ["1 Year Warranty", "Windows 10 Pro", "Energy Efficient"],
+          image: "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=400"
+        },
+        {
+          icon: "server",
+          name: "Dell PowerEdge R440",
+          specs: "Xeon • 32GB RAM • 1TB HDD",
+          price: "₹45,000",
+          features: ["90 Day Warranty", "Rack Ready", "Tested & Certified"],
+          image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=400"
+        }
+      ]);
+      const [clients] = useState([
+        { src: "https://upload.wikimedia.org/wikipedia/commons/6/69/TCS_Logo.svg", alt: "TCS" },
+        { src: "https://upload.wikimedia.org/wikipedia/commons/0/0c/Infosys_logo.svg", alt: "Infosys" },
+        { src: "https://upload.wikimedia.org/wikipedia/commons/9/95/Wipro_Logo.svg", alt: "Wipro" },
+        { src: "https://upload.wikimedia.org/wikipedia/commons/b/b1/Tech_Mahindra_New_Logo.svg", alt: "Tech Mahindra" }
+      ]);
+      const [siteText] = useState({
+        heroTitle: "Simplifying E-Waste Management for IT Companies",
+        heroDesc: "Trusted partner for IT Asset Disposition (ITAD) and e-waste recycling. From secure data destruction to EPR credits, we handle everything with complete compliance."
+      });
+
+      useEffect(()=>{
+        window.addEventListener("scroll",()=>setScrolled(window.scrollY>20));
+        return()=>window.removeEventListener("scroll",()=>{});
+      },[]);
+      
+      useEffect(()=>{
+        setTimeout(()=>{
+          window.lucide?.createIcons();
+          const hero = document.querySelector('.hero-section');
+          if (hero && !hero.querySelector('.particles')) {
+            const particles = document.createElement('div');
+            particles.className = 'particles';
+            for(let i=0;i<15;i++){
+              const p = document.createElement('div');
+              p.className = 'particle';
+              p.style.left = Math.random()*100+'%';
+              p.style.width = p.style.height = (Math.random()*60+20)+'px';
+              p.style.animationDelay = Math.random()*15+'s';
+              particles.appendChild(p);
+            }
+            hero.appendChild(particles);
+          }
+        },100);
+      },[page]);
+
+      const nav=(p)=>{setPage(p);setMenuOpen(false);window.scrollTo({top:0,behavior:"smooth"});};
+      const change=e=>setForm({...form,[e.target.name]:e.target.value});
+
+      return(
+        <div className="font-sans min-h-screen">
+          {/* NAVBAR */}
+          <header className={`fixed w-full top-0 z-50 transition-all duration-300 ${scrolled?"bg-white/95 backdrop-blur-md shadow-xl py-2":"bg-white py-4"}`}>
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
+              <div className="flex items-center cursor-pointer group" onClick={()=>nav("home")}>
+                <div className="flex flex-col">
+                  <div className="flex items-baseline">
+                    <span className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent group-hover:scale-110 transition-transform">G</span>
+                    <span className="text-2xl sm:text-3xl font-bold text-gray-700">reylon</span>
+                  </div>
+                  <p className="text-xs sm:text-sm text-gray-600 font-medium">Where Tech Meets Sustainability</p>
+                </div>
+              </div>
+
+              <nav className="hidden md:flex space-x-1 lg:space-x-4 text-gray-700 font-medium">
+                {["home","services","products","epr","blog","about","contact"].map(p=>
+                  <button key={p} onClick={()=>nav(p)} className={`capitalize hover:text-green-600 transition-all px-3 py-2 rounded-lg text-sm lg:text-base relative ${page===p?"text-green-600 font-semibold":"hover:bg-green-50"}`}>
+                    {p.charAt(0).toUpperCase()+p.slice(1)}
+                    {page===p && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-green-600 to-emerald-600"></div>}
+                  </button>)}
+              </nav>
+
+              <button onClick={()=>setMenuOpen(!menuOpen)} className="md:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors">
+                <i data-lucide={menuOpen?"x":"menu"} className="w-6 h-6"></i>
+              </button>
+            </div>
+
+            {menuOpen&&(
+              <div className="md:hidden bg-white border-t border-gray-200 shadow-lg fade-in">
+                <div className="px-4 py-3 space-y-1">
+                  {["home","services","products","epr","blog","about","contact"].map(p=>
+                    <button key={p} onClick={()=>nav(p)} className={`block w-full text-left capitalize px-3 py-2 rounded-lg text-base font-medium transition-all ${page===p?"text-white bg-gradient-to-r from-green-600 to-emerald-600":"text-gray-700 hover:bg-gray-50"}`}>
+                      {p.charAt(0).toUpperCase()+p.slice(1)}
+                    </button>)}
+                </div>
+              </div>)}
+          </header>
+
+          {/* HOME */}
+          {page==="home"&&(
+            <>
+              <section className="hero-section pt-24 sm:pt-32 pb-16 relative overflow-hidden" style={{background: 'linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 50%, #80cbc4 100%)'}}>
+                <div className="absolute inset-0 opacity-30">
+                  <div className="absolute top-20 left-10 w-64 h-64 sm:w-96 sm:h-96 bg-teal-300 rounded-full blur-3xl pulse-slow"></div>
+                  <div className="absolute bottom-20 right-10 w-80 h-80 sm:w-[500px] sm:h-[500px] bg-cyan-300 rounded-full blur-3xl pulse-slow" style={{animationDelay:"1s"}}></div>
+                </div>
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+                  <div className="text-center max-w-4xl mx-auto fade-in">
+                    <div className="inline-flex items-center space-x-2 bg-white/90 backdrop-blur-sm text-teal-700 px-4 py-2 rounded-full text-sm font-medium mb-6 shadow-lg shimmer">
+                      <i data-lucide="leaf" className="w-4 h-4"></i>
+                      <span>Sustainable IT Solutions</span>
+                    </div>
+                    <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+                      {siteText.heroTitle}
+                    </h2>
+                    <p className="text-base sm:text-lg md:text-xl text-gray-700 mb-10 leading-relaxed px-2">
+                      {siteText.heroDesc}
+                    </p>
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center px-4">
+                      <button onClick={()=>nav("contact")} className="bg-teal-600 text-white px-8 py-4 rounded-full shadow-2xl hover:shadow-3xl hover:bg-teal-700 transition-all text-lg font-medium card-hover">
+                        Get a Free Quote
+                      </button>
+                      <button onClick={()=>nav("services")} className="bg-transparent border-2 border-teal-600 text-teal-700 px-8 py-4 rounded-full shadow-lg hover:bg-teal-600 hover:text-white transition-all text-lg font-medium">
+                        Our Services
+                      </button>
+                    </div>
+                  </div>
+                 <div className="grid grid-cols-3 gap-4 sm:gap-8 max-w-3xl mx-auto mt-12 sm:mt-20" data-aos="fade-up" data-aos-delay="200">
+                   {[{value:"100%",label:"Legal Compliance"},{value:"Certified",label:"Authorized Partners"},{value:"24/7",label:"Support Available"}].map((s,i)=>
+                    <div key={i} className="text-center bg-white/80 backdrop-blur-sm p-3 sm:p-4 rounded-xl border border-teal-200 card-hover shadow-lg">
+                      <div className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-1 break-words">{s.value}</div>
+                      <div className="text-xs sm:text-sm text-gray-700 break-words">{s.label}</div>
+                    </div>)}
+                  </div>
+                </div>
+              </section>
+
+              <section className="py-20 bg-white relative overflow-hidden">
+                <div className="absolute inset-0 opacity-5">
+                  <div className="absolute top-10 right-20 w-64 h-64 bg-green-500 rounded-full blur-3xl"></div>
+                </div>
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+                  <div className="text-center mb-16 fade-in">
+                    <h3 className="text-4xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-4">What We Do</h3>
+                    <p className="text-xl text-gray-600">Complete e-waste solutions and refurbished IT equipment</p>
+                  </div>
+                  <div className="grid sm:grid-cols-2 gap-8">
+                    {[
+                      {icon:"recycle",title:"E-Waste & ITAD Services",desc:"Complete IT Asset Disposition with secure data destruction, EPR credits, and authorized recycler coordination.",gradient:"from-green-500 to-emerald-500",link:"services"},
+                      {icon:"package",title:"Refurbished IT Equipment",desc:"Certified laptops, desktops, and servers with warranty. Quality-tested and ready for business use.",gradient:"from-blue-500 to-cyan-500",link:"products"}
+                    ].map((i,idx)=>
+                      <div key={idx} className="group relative bg-white p-8 rounded-3xl border-2 border-gray-100 card-hover shadow-xl hover:shadow-2xl overflow-hidden cursor-pointer" onClick={()=>nav(i.link)}>
+                        <div className="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-5 transition-opacity duration-500" style={{backgroundImage:`linear-gradient(to bottom right, var(--tw-gradient-stops))`}}></div>
+                        <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${i.gradient} flex items-center justify-center text-white mb-6 group-hover:scale-110 transition-transform duration-500 float`}>
+                          <i data-lucide={i.icon} className="w-8 h-8"></i>
+                        </div>
+                        <h4 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-green-600 transition-colors">{i.title}</h4>
+                        <p className="text-gray-700 mb-6 leading-relaxed">{i.desc}</p>
+                        <button onClick={(e)=>{e.stopPropagation();nav(i.link);}} className="text-green-600 font-medium flex items-center gap-2 group-hover:gap-4 transition-all">
+                          Learn More <i data-lucide="arrow-right" className="w-5 h-5"></i>
+                        </button>
+                      </div>)}
+                  </div>
+                </div>
+              </section>
+
+                            {/* CLIENT TESTIMONIALS - HORIZONTAL SCROLL */}
+              <section className="py-20 bg-gradient-to-br from-gray-50 via-green-50 to-emerald-50 relative overflow-hidden">
+                <div className="absolute inset-0 opacity-10">
+                  <div className="absolute bottom-10 left-20 w-96 h-96 bg-green-400 rounded-full blur-3xl float"></div>
+                </div>
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+                  <h3 className="text-4xl font-bold text-center bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-12 fade-in">
+                    What Our Clients Say
+                  </h3>
+
+                  {/* HORIZONTAL Scroll Container */}
+                  <div className="overflow-x-auto scrollbar-hide">
+                    <div className="flex gap-8 px-4 pb-4 snap-x snap-mandatory">
+                      {[
+                        {name:"Ravi Sharma",role:"IT Head, TCS",quote:"Greylon made our e-waste compliance effortless. Full documentation and EPR credits delivered on time.",rating:5,avatar:"RS"},
+                        {name:"Priya Mehta",role:"Procurement, Infosys",quote:"Best rates for refurbished laptops. Saved 40% vs new, with 90-day warranty. Highly recommend!",rating:5,avatar:"PM"},
+                        {name:"Amit Patel",role:"Sustainability Lead, Wipro",quote:"Pan-India pickup and CPCB compliance in one go. Finally, a partner we can trust.",rating:5,avatar:"AP"},
+                        {name:"Neha Kapoor",role:"CTO, Tech Mahindra",quote:"Secure data destruction and certified recycling. Greylon is our go-to for ITAD.",rating:5,avatar:"NK"},
+                        {name:"Vikram Singh",role:"Operations Head, HCL",quote:"Smooth process from pickup to certification. Highly professional team.",rating:5,avatar:"VS"}
+                      ].map((t,i)=>
+                        <div
+                          key={i}
+                          className="min-w-[320px] max-w-[360px] bg-white p-8 rounded-3xl shadow-xl card-hover glow-border snap-center"
+                          style={{animationDelay: i*0.1 + 's'}}
+                        >
+                          <div className="flex items-center gap-4 mb-6">
+                            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center text-white text-xl font-bold">
+                              {t.avatar}
+                            </div>
+                            <div>
+                              <p className="font-bold text-gray-900 text-lg">{t.name}</p>
+                              <p className="text-sm text-gray-600">{t.role}</p>
+                            </div>
+                          </div>
+                          <div className="flex mb-4">
+                            {[...Array(t.rating)].map((_,j)=><i key={j} data-lucide="star" className="w-5 h-5 text-yellow-500 fill-current"></i>)}
+                          </div>
+                          <p className="text-gray-700 italic leading-relaxed">"{t.quote}"</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Optional: Scroll Indicator */}
+                  <div className="flex justify-center mt-6 gap-2">
+                    {[0,1,2,3,4].map((_,i)=>(
+                      <div key={i} className="w-2 h-2 bg-gray-300 rounded-full"></div>
+                    ))}
+                  </div>
+                </div>
+              </section>
+
+              {/* CLIENT LOGO TICKER */}
+              <section className="bg-white py-12 overflow-hidden border-t-2 border-b-2 border-gray-100">
+                <div className="max-w-7xl mx-auto px-4">
+                  <p className="text-center text-sm font-bold text-gray-700 mb-6 uppercase tracking-wider">Trusted by Leading IT Companies</p>
+                  <div className="relative">
+                    <div className="flex ticker">
+                      {clients.flatMap(l => [
+                        <div key={l.alt} className="flex items-center justify-center mx-12">
+                          <img src={l.src} alt={l.alt} className="h-14 w-auto opacity-60 hover:opacity-100 transition-all hover:scale-110"/>
+                        </div>,
+                        <div key={l.alt+"-dup"} className="flex items-center justify-center mx-12">
+                          <img src={l.src} alt={l.alt} className="h-14 w-auto opacity-60 hover:opacity-100 transition-all hover:scale-110"/>
+                        </div>
+                      ])}
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              {/* CTA SECTION */}
+              <section className="py-20 gradient-animate relative overflow-hidden">
+                <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
+                  <h3 className="text-4xl font-bold text-white mb-6 drop-shadow-lg">Ready to Get Started?</h3>
+                  <p className="text-xl text-white/90 mb-8 drop-shadow-md">Let's simplify your e-waste management together</p>
+                  <button onClick={()=>nav("contact")} className="bg-white text-green-600 px-10 py-4 rounded-full shadow-2xl hover:shadow-3xl transition-all text-lg font-bold card-hover shimmer">
+                    Contact Us Today
+                  </button>
+                </div>
+              </section>
+            </>
+          )}
+
+          {/* SERVICES */}
+          {page==="services"&&(
+            <section className="pt-32 pb-20 bg-white min-h-screen">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6">
+                <div className="text-center mb-16 fade-in">
+                  <h2 className="text-5xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-4">Our Services</h2>
+                  <p className="text-xl text-gray-600">End-to-end support for all your e-waste management needs</p>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+                  {[
+                    {icon:"file-check",title:"E-Waste Asset Listing",desc:"Detailed Excel records of all your e-waste assets for transparency and audit readiness.",gradient:"from-blue-500 to-cyan-500"},
+                    {icon:"recycle",title:"IT Asset Disposal (ITAD)",desc:"Secure disposal of retired IT assets with authorized recyclers and complete documentation.",gradient:"from-green-500 to-emerald-500"},
+                    {icon:"shield",title:"Data Destruction",desc:"Certified secure data erasure and physical destruction services for sensitive information.",gradient:"from-red-500 to-pink-500"},
+                    {icon:"leaf",title:"EPR Credits & Compliance",desc:"Extended Producer Responsibility credits and complete Form 6, Green Certificate handling.",gradient:"from-amber-500 to-orange-500"}
+                  ].map((s,i)=>
+                    <div key={i} className="group relative bg-white p-6 rounded-3xl shadow-lg hover:shadow-2xl transition-all border-2 border-gray-100 card-hover" style={{animationDelay:i*0.1+'s'}}>
+                      <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${s.gradient} flex items-center justify-center text-white mb-4 group-hover:scale-110 group-hover:rotate-3 transition-transform float`}>
+                        <i data-lucide={s.icon} className="w-8 h-8"></i>
+                      </div>
+                      <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-green-600 transition-colors">{s.title}</h3>
+                      <p className="text-gray-600 leading-relaxed">{s.desc}</p>
+                    </div>)}
+                </div>
+
+                <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-12 rounded-3xl mb-12 fade-in shadow-xl border-2 border-green-100">
+                  <h3 className="text-3xl font-bold text-center bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-12">How It Works</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8">
+                    {[
+                      {step:"01",title:"Contact Us",desc:"Reach out with your e-waste disposal needs"},
+                      {step:"02",title:"Asset Listing",desc:"We create detailed inventory of all items"},
+                      {step:"03",title:"Get Quotation",desc:"Best price from authorized recycler"},
+                      {step:"04",title:"Secure Pickup",desc:"Safe collection with data destruction"},
+                      {step:"05",title:"Certification",desc:"Receive compliance docs and EPR credits"}
+                    ].map((it,i)=>
+                      <div key={i} className="text-center card-hover" style={{animationDelay:i*0.1+'s'}}>
+                        <div className="w-16 h-16 bg-gradient-to-br from-green-600 to-emerald-600 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4 shadow-lg shimmer">{it.step}</div>
+                        <h4 className="text-lg font-bold text-gray-900 mb-2">{it.title}</h4>
+                        <p className="text-gray-600 text-sm leading-relaxed">{it.desc}</p>
+                      </div>)}
+                  </div>
+                </div>
+
+                <div className="text-center">
+                  <button onClick={()=>nav("contact")} className="bg-gradient-to-r from-green-600 to-emerald-600 text-white px-10 py-4 rounded-full shadow-xl hover:shadow-2xl transition-all text-lg font-bold card-hover">
+                    Get Started Today
+                  </button>
+                </div>
+              </div>
+            </section>
+          )}
+
+          {/* PRODUCTS */}
+          {page==="products"&&(
+            <section className="pt-32 pb-20 bg-gradient-to-br from-gray-50 to-green-50 min-h-screen">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6">
+                <div className="text-center mb-16 fade-in">
+                  <h2 className="text-5xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-4">
+                    Certified Refurbished IT Equipment
+                  </h2>
+                  <p className="text-xl text-gray-600">Quality-tested, warranty-backed solutions for startups, offices, and institutions</p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                  {products.map((p, i) => (
+                    <div key={i} className="bg-white p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all border-2 border-gray-100 card-hover group overflow-hidden" style={{animationDelay:i*0.1+'s'}}>
+                      <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                      {p.image && (
+                        <div className="relative h-48 mb-6 rounded-2xl overflow-hidden bg-gray-50">
+                          <img src={p.image} alt={p.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                        </div>
+                      )}
+                      <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${
+                        p.icon === "laptop" ? "from-blue-500 to-indigo-600" :
+                        p.icon === "monitor" ? "from-green-500 to-teal-600" :
+                        "from-purple-500 to-pink-600"
+                      } flex items-center justify-center text-white mb-4 float`}>
+                        <i data-lucide={p.icon || "laptop"} className="w-8 h-8"></i>
+                      </div>
+                      <h3 className="text-2xl font-bold text-gray-900 mb-2 group-hover:text-green-600 transition-colors">{p.name}</h3>
+                      <p className="text-gray-600 mb-4">{p.specs}</p>
+                      <div className="text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-6">{p.price}</div>
+                      <div className="space-y-2 mb-6">
+                        {(p.features || []).map((f, j) => (
+                          <div key={j} className="flex items-center gap-3 text-sm text-gray-700">
+                            <i data-lucide="check-circle" className="w-5 h-5 text-green-600"></i>
+                            <span>{f}</span>
+                          </div>
+                        ))}
+                      </div>
+                      <button onClick={() => nav("contact")} className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-3 rounded-xl hover:shadow-lg transition-all font-medium shimmer">
+                        Get Quote
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          )}
+
+          {/* EPR */}
+          {page==="epr"&&(
+            <section className="pt-32 pb-20 bg-gradient-to-br from-amber-50 to-green-50 min-h-screen">
+              <div className="max-w-4xl mx-auto px-4 sm:px-6">
+                <div className="text-center mb-16 fade-in">
+                  <h2 className="text-5xl font-bold bg-gradient-to-r from-amber-600 to-green-600 bg-clip-text text-transparent mb-4">What is EPR?</h2>
+                  <p className="text-xl text-gray-600">Extended Producer Responsibility Explained</p>
+                </div>
+                <div className="bg-white p-10 rounded-3xl shadow-2xl fade-in card-hover">
+                  <div className="space-y-8">
+                    <div>
+                      <div className="w-16 h-16 bg-gradient-to-br from-amber-500 to-orange-500 rounded-2xl flex items-center justify-center text-white mb-4 float">
+                        <i data-lucide="award" className="w-8 h-8"></i>
+                      </div>
+                      <h3 className="text-3xl font-bold text-gray-900 mb-4">Extended Producer Responsibility (EPR)</h3>
+                      <p className="text-gray-700 leading-relaxed text-lg">EPR is a policy approach under which <strong>producers are given significant responsibility</strong> – financial and/or physical – for the treatment or disposal of post-consumer products.</p>
+                    </div>
+                    <div className="grid sm:grid-cols-2 gap-6">
+                      <div className="bg-gradient-to-br from-amber-50 to-orange-50 p-6 rounded-2xl border-2 border-amber-100 card-hover">
+                        <div className="text-3xl mb-3">🏭</div>
+                        <h4 className="font-bold text-amber-800 mb-2 text-lg">For Producers</h4>
+                        <p className="text-gray-700">Mandatory to collect & recycle a percentage of e-waste they produce.</p>
+                      </div>
+                      <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-2xl border-2 border-green-100 card-hover">
+                        <div className="text-3xl mb-3">✅</div>
+                        <h4 className="font-bold text-green-800 mb-2 text-lg">For You</h4>
+                        <p className="text-gray-700">Get <strong>EPR Credits</strong> when you dispose via authorized channels.</p>
+                      </div>
+                    </div>
+                    <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-6 rounded-2xl border-2 border-green-100">
+                      <h4 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        <i data-lucide="shield-check" className="w-6 h-6 text-green-600"></i>
+                        How Greylon Helps
+                      </h4>
+                      <ul className="space-y-4 text-gray-700">
+                        <li className="flex items-start gap-3">
+                          <i data-lucide="check" className="w-6 h-6 text-green-600 mt-0.5 flex-shrink-0"></i>
+                          <span>We generate EPR-compliant documentation</span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <i data-lucide="check" className="w-6 h-6 text-green-600 mt-0.5 flex-shrink-0"></i>
+                          <span>Issue Form 6 & Green Certificates</span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <i data-lucide="check" className="w-6 h-6 text-green-600 mt-0.5 flex-shrink-0"></i>
+                          <span>Help you meet CPCB targets</span>
+                        </li>
+                      </ul>
+                    </div>
+                    <div className="text-center pt-6">
+                      <button onClick={()=>nav("contact")} className="bg-gradient-to-r from-green-600 to-emerald-600 text-white px-10 py-4 rounded-full shadow-xl hover:shadow-2xl transition-all text-lg font-bold card-hover shimmer">
+                        Get EPR Compliance Help
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          )}
+
+          {/* BLOG */}
+          {page==="blog"&&(
+            <section className="pt-32 pb-20 bg-white min-h-screen">
+              <div className="max-w-5xl mx-auto px-4 sm:px-6">
+                <div className="text-center mb-16 fade-in">
+                  <h2 className="text-5xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-4">E-Waste Awareness Blog</h2>
+                  <p className="text-xl text-gray-600">Learn, Act, Sustain</p>
+                </div>
+                <div className="grid gap-8">
+                  {[
+                    {title:"Why India Produces 3.2 Million Tons of E-Waste Yearly",date:"Nov 05, 2025",excerpt:"India is the 3rd largest e-waste generator. Here's what it means for businesses.",tag:"Statistics",color:"from-blue-500 to-cyan-500"},
+                    {title:"5 Ways to Extend Laptop Life & Reduce E-Waste",date:"Oct 15, 2025",excerpt:"Simple IT policies that save money and the planet.",tag:"Tips",color:"from-green-500 to-emerald-500"},
+                    {title:"Data Destruction: Why Wiping Isn't Enough",date:"Oct 10, 2025",excerpt:"Physical destruction vs software erasure – what's safer?",tag:"Security",color:"from-red-500 to-pink-500"}
+                  ].map((b,i)=>
+                    <article key={i} className="group bg-white p-8 rounded-3xl border-2 border-gray-100 hover:shadow-2xl transition-all card-hover" style={{animationDelay:i*0.1+'s'}}>
+                      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3">
+                        <span className={`text-sm font-bold text-white bg-gradient-to-r ${b.color} px-4 py-2 rounded-full shadow-lg`}>{b.tag}</span>
+                        <span className="text-sm text-gray-500 flex items-center gap-2">
+                          <i data-lucide="calendar" className="w-4 h-4"></i>
+                          {b.date}
+                        </span>
+                      </div>
+                      <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-green-600 transition-colors">{b.title}</h3>
+                      <p className="text-gray-700 mb-6 leading-relaxed">{b.excerpt}</p>
+                      <button className="text-green-600 font-medium flex items-center gap-2 group-hover:gap-4 transition-all">
+                        Read More <i data-lucide="arrow-right" className="w-5 h-5"></i>
+                      </button>
+                    </article>)}
+                </div>
+              </div>
+            </section>
+          )}
+
+         {/* ABOUT */}
+         {page==="about"&&(
+           <section className="pt-32 pb-20 bg-gradient-to-br from-gray-50 to-green-50 min-h-screen">
+             <div className="max-w-6xl mx-auto px-4 sm:px-6">
+               <div className="text-center mb-16 fade-in">
+                 <h2 className="text-5xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-6">About Greylon</h2>
+                 <div className="w-24 h-1 bg-gradient-to-r from-green-600 to-emerald-600 mx-auto rounded-full"></div>
+              </div>
+      
+              <div className="grid md:grid-cols-2 gap-8 mb-12">
+                {/* Company Overview */}
+                <div className="bg-white p-8 rounded-3xl shadow-xl card-hover">
+                  <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center text-white mb-6 float">
+                    <i data-lucide="building-2" className="w-8 h-8"></i>
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Who We Are</h3>
+                  <p className="text-gray-700 leading-relaxed mb-4">
+                    Greylon is a trusted bridge between IT companies and authorized recyclers, specializing in comprehensive e-waste management solutions.
+                  </p>
+                  <p className="text-gray-700 leading-relaxed">
+                    Backed by deep expertise in IT Asset Disposition (ITAD) and e-waste compliance, we help enterprises across India manage their end-of-life IT assets with secure, transparent, and eco-friendly solutions.
+                  </p>
+                </div>
+
+                {/* Mission */}
+                <div className="bg-white p-8 rounded-3xl shadow-xl card-hover" style={{animationDelay:'0.1s'}}>
+                  <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-2xl flex items-center justify-center text-white mb-6 float" style={{animationDelay:'1s'}}>
+                    <i data-lucide="target" className="w-8 h-8"></i>
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Our Mission</h3>
+                  <p className="text-gray-700 leading-relaxed mb-4">
+                    To simplify e-waste management for IT companies through complete compliance, transparent processes, and sustainable practices.
+                  </p>
+                  <p className="text-gray-700 leading-relaxed">
+                    We empower businesses to meet their environmental responsibilities while maximizing value recovery from retired IT assets.
+                  </p>
+                </div>
+              </div>
+
+              {/* Vision */}
+              <div className="bg-white p-10 rounded-3xl shadow-xl mb-12 fade-in card-hover" style={{animationDelay:'0.2s'}}>
+                <div className="flex flex-col md:flex-row items-start gap-6">
+                  <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center text-white flex-shrink-0 float" style={{animationDelay:'2s'}}>
+                    <i data-lucide="eye" className="w-8 h-8"></i>
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-3xl font-bold text-gray-900 mb-4">Our Vision</h3>
+                    <p className="text-xl text-gray-700 leading-relaxed mb-4">
+                      To become India's most trusted partner in sustainable IT asset management, driving the circular economy and making e-waste disposal seamless for every organization.
+                    </p>
+                    <p className="text-lg text-gray-600 leading-relaxed">
+                      We envision a future where every piece of electronic waste is responsibly managed, contributing to a cleaner planet and compliance-ready businesses nationwide.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Core Values */}
+              <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {[
+                  {icon:"shield-check",title:"Compliance First",desc:"100% adherence to CPCB and EPR regulations",color:"from-green-500 to-emerald-600"},
+                  {icon:"handshake",title:"Transparency",desc:"Clear documentation and audit-ready processes",color:"from-blue-500 to-cyan-600"},
+                  {icon:"leaf",title:"Sustainability",desc:"Eco-friendly practices for a greener tomorrow",color:"from-teal-500 to-green-600"},
+                  {icon:"award",title:"Quality Service",desc:"Pan-India support with certified partners",color:"from-amber-500 to-orange-600"}
+                ].map((v,i)=>
+                  <div key={i} className="bg-white p-6 rounded-2xl shadow-lg card-hover text-center" style={{animationDelay:i*0.1+'s'}}>
+                    <div className={`w-14 h-14 bg-gradient-to-br ${v.color} rounded-xl flex items-center justify-center text-white mx-auto mb-4 float`} style={{animationDelay:i*0.5+'s'}}>
+                      <i data-lucide={v.icon} className="w-7 h-7"></i>
+                    </div>
+                    <h4 className="text-lg font-bold text-gray-900 mb-2">{v.title}</h4>
+                    <p className="text-sm text-gray-600 leading-relaxed">{v.desc}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </section>
+        )}
+
+          {/* CONTACT */}
+          {page==="contact"&&(
+            <section className="pt-32 pb-20 bg-gradient-to-br from-gray-50 to-green-50 min-h-screen">
+              <div className="max-w-6xl mx-auto px-4 sm:px-6">
+                <div className="text-center mb-16 fade-in">
+                  <h2 className="text-5xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-4">Get In Touch</h2>
+                  <p className="text-xl text-gray-600">Ready to simplify your e-waste management?</p>
+                </div>
+                <div className="grid md:grid-cols-2 gap-8">
+                  <div className="bg-white p-8 rounded-3xl shadow-2xl card-hover">
+                    <h3 className="text-2xl font-bold text-gray-900 mb-6">Send us a message</h3>
+                    <div className="space-y-4">
+                      <input name="name" onChange={change} value={form.name} placeholder="Your Name" className="w-full border-2 border-gray-200 p-4 rounded-xl focus:border-green-500 focus:outline-none transition-colors"/>
+                      <input name="company" onChange={change} value={form.company} placeholder="Company Name" className="w-full border-2 border-gray-200 p-4 rounded-xl focus:border-green-500 focus:outline-none transition-colors"/>
+                      <input name="email" onChange={change} value={form.email} type="email" placeholder="Email Address" className="w-full border-2 border-gray-200 p-4 rounded-xl focus:border-green-500 focus:outline-none transition-colors"/>
+                      <textarea name="message" onChange={change} value={form.message} placeholder="Your Message" className="w-full border-2 border-gray-200 p-4 rounded-xl h-32 focus:border-green-500 focus:outline-none transition-colors resize-none"/>
+                      <button className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-4 rounded-xl hover:shadow-xl transition-all font-bold text-lg shimmer">
+                        Send Message
+                      </button>
+                    </div>
+                  </div>
+                  <div className="space-y-6 fade-in" style={{animationDelay:'0.1s'}}>
+                    <div className="bg-white p-8 rounded-3xl shadow-xl card-hover">
+                      <h3 className="text-2xl font-bold text-gray-900 mb-6">Contact Information</h3>
+                      <div className="space-y-6">
+                        <div className="flex items-start space-x-4">
+                          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center flex-shrink-0 shadow-lg">
+                            <i data-lucide="phone" className="text-white w-6 h-6"></i>
+                          </div>
+                          <div>
+                            <p className="font-bold text-gray-900 text-lg">Phone</p>
+                            <p className="text-gray-600">+91 86576 99285</p>
+                          </div>
+                        </div>
+                        <div className="flex items-start space-x-4">
+                          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center flex-shrink-0 shadow-lg">
+                            <i data-lucide="mail" className="text-white w-6 h-6"></i>
+                          </div>
+                          <div>
+                            <p className="font-bold text-gray-900 text-lg">Email</p>
+                            <p className="text-gray-600">greylonindia@gmail.com</p>
+                          </div>
+                        </div>
+                        <div className="flex items-start space-x-4">
+                          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center flex-shrink-0 shadow-lg">
+                            <i data-lucide="map-pin" className="text-white w-6 h-6"></i>
+                          </div>
+                          <div>
+                            <p className="font-bold text-gray-900 text-lg">Location</p>
+                            <p className="text-gray-600">Mumbai, Maharashtra, India</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          )}
+
+                   {/* FOOTER */}
+          <footer className="bg-gradient-to-r from-gray-900 to-gray-800 text-white py-12 mt-20">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6">
+              <div className="flex flex-col sm:flex-row justify-between items-center gap-6">
+                <div className="flex items-center">
+                  <div className="flex flex-col">
+                    <div className="flex items-baseline">
+                      <span className="text-3xl font-bold text-green-500">G</span>
+                      <span className="text-3xl font-bold text-white">reylon</span>
+                    </div>
+                    <p className="text-sm text-gray-400">Where Tech Meets Sustainability</p>
+                  </div>
+                </div>
+                <div className="flex gap-4">
+                  {["home","services","products","contact"].map(p=>
+                    <button key={p} onClick={()=>nav(p)} className="text-gray-400 hover:text-green-500 transition-colors capitalize">
+                      {p}
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* SOCIAL MEDIA ICONS */}
+              <div className="flex gap-4 justify-center mt-8">
+                <a href="https://linkedin.com/company/greylon" target="_blank" rel="noopener"
+                   className="w-10 h-10 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-white hover:scale-110 hover:shadow-lg transition-all card-hover"
+                   aria-label="LinkedIn">
+                  <i data-lucide="linkedin" className="w-5 h-5"></i>
+                </a>
+                <a href="https://twitter.com/greylon_india" target="_blank" rel="noopener"
+                   className="w-10 h-10 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-white hover:scale-110 hover:shadow-lg transition-all card-hover"
+                   aria-label="Twitter">
+                  <i data-lucide="twitter" className="w-5 h-5"></i>
+                </a>
+                <a href="https://instagram.com/greylon_india" target="_blank" rel="noopener"
+                   className="w-10 h-10 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-white hover:scale-110 hover:shadow-lg transition-all card-hover"
+                   aria-label="Instagram">
+                  <i data-lucide="instagram" className="w-5 h-5"></i>
+                </a>
+                <a href="https://wa.me/918657699285" target="_blank" rel="noopener"
+                   className="w-10 h-10 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-white hover:scale-110 hover:shadow-lg transition-all card-hover"
+                   aria-label="WhatsApp">
+                  <i data-lucide="message-circle" className="w-5 h-5"></i>
+                </a>
+              </div>
+
+              <div className="border-t border-gray-700 mt-8 pt-8 text-center">
+                <p className="text-gray-400">© 2025 Greylon. All Rights Reserved.</p>
+              </div>
+            </div>
+          </footer>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<Greylon />);
+    setTimeout(() => window.lucide?.createIcons(), 100);
+  </script>
+</body>
+</html>
